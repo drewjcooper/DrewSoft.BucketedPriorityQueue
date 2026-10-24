@@ -1,0 +1,38 @@
+name: Publish NuGet Package
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore DrewSoft.Collections.sln
+
+      - name: Build solution
+        run: dotnet build DrewSoft.Collections.sln --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test DrewSoft.Collections.sln --configuration Release --no-build --verbosity minimal
+
+      - name: Pack NuGet package
+        run: dotnet pack src/Collections.csproj --configuration Release --no-build --output ./artifacts
+
+      - name: Publish NuGet package
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push ./artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate

@@ -7,6 +7,23 @@
     <RootNamespace>DrewSoft.Collections</RootNamespace>
 
     <IsPackable>true</IsPackable>
+
+    <PackageId>DrewSoft.Collections</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>DrewSoft</Authors>
+    <Company>DrewSoft</Company>
+    <Product>DrewSoft.Collections</Product>
+    <Description>A bucketed priority queue collection for .NET.</Description>
+    <PackageProjectUrl>https://github.com/DrewSoft/DrewSoft.BucketedPriorityQueue</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DrewSoft/DrewSoft.BucketedPriorityQueue</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>priority-queue;collections;bucketed;dotnet</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
