@@ -8,6 +8,9 @@ on:
 
 jobs:
   build-and-publish:
+    permissions:
+      contents: read
+      id-token: write 
     runs-on: ubuntu-latest
 
     steps:
@@ -31,8 +34,15 @@ jobs:
       - name: Pack NuGet package
         run: dotnet pack src/Collections.csproj --configuration Release --no-build --output ./artifacts
 
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          # Secret is your NuGet username, e.g. andrewlock
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish NuGet package
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: |
           dotnet nuget push ./artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
